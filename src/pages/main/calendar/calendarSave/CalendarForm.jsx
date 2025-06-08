@@ -1,11 +1,11 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import S from "./style";
 
 const CalendarForm = ({
   initialName = "",
   calendarId,
   initialInvited = [],
-  setInvitedMembers, // 부모 set 함수 받기!
+  setInvitedMembers,
   allMembers = [],
   currentMembers = [],
   showInviteSection = true,
@@ -20,6 +20,14 @@ const CalendarForm = ({
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const dropdownRef = useRef(null);
+
+  // 현재 로그인 사용자가 호스트인지 여부
+  const isCurrentUserHost = useMemo(() => {
+    const currentUser = currentMembers.find(
+      (m) => (m.memberId ?? m.id) === Number(memberId)
+    );
+    return currentUser?.calendarMemberIsHost === 1;
+  }, [currentMembers, memberId]);
 
   // 드롭다운 외부 클릭 감지 → 닫기
   useEffect(() => {
@@ -60,8 +68,8 @@ const CalendarForm = ({
         }
 
         const newMembers = [...localInvitedMembers, newMember];
-        setLocalInvitedMembers(newMembers); // 내부 state
-        setInvitedMembers(newMembers); // 부모 state
+        setLocalInvitedMembers(newMembers);
+        setInvitedMembers(newMembers);
       } catch (error) {
         console.error("초대 요청 실패:", error);
         alert("초대 요청 중 오류가 발생했습니다.");
@@ -88,9 +96,6 @@ const CalendarForm = ({
       alert("초대 취소 중 오류 발생");
     }
   };
-
-  // initialInvited 디버그
-  console.log(currentMembers);
 
   useEffect(() => {
     setLocalInvitedMembers(initialInvited);
@@ -193,8 +198,8 @@ const CalendarForm = ({
                       <S.MemberName>{member.memberName}</S.MemberName>
                     </S.MemberInfoContainer>
 
-                    {/* 호스트가 아닐 때만 추방하기 버튼 노출 */}
-                    {member.calendarMemberIsHost === 0 && (
+                    {/* 호스트(로그인 사용자)만 추방 가능 + 대상 멤버가 호스트 X */}
+                    {isCurrentUserHost && member.calendarMemberIsHost === 0 && (
                       <S.RemoveButton
                         onClick={() => removeMember(memberKey)}
                       >
