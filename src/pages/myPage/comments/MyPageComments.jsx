@@ -32,7 +32,7 @@ const MyPageComments = () => {
     if (String(ownerId) !== String(memberId)) {
       navigate(`/main/mypage/${ownerId}`, { replace: true });
     }
-  }, [memberId, navigate, ownerId, currentUser]);
+  }, [memberId, navigate, ownerId]);
 
   useEffect(() => {
     const getMyCommnets = async () => {
@@ -52,7 +52,7 @@ const MyPageComments = () => {
             <span>커뮤니티에서 내가 쓴 모든 댓글을 확인할 수 있습니다.</span>
           </S.TitleTopContainer>
           <S.TitleBottomContainer>
-              <span>내가 쓴 댓글</span>
+              <span>내가 쓴 댓글 ✍️</span>
           </S.TitleBottomContainer>
         </S.TitleContainer>
         <S.BodyContainer>
@@ -78,12 +78,12 @@ const MyPageComments = () => {
               </S.ItemContainer>
             </NavLink>
           ))}
+        </S.BodyContainer>
           <Pagination 
             currentPage={currentPage}
             totalPages={Math.ceil(myComments.length / itemsPerPage)}
             onPageChange={setCurrentPage}
           />
-        </S.BodyContainer>
       </S.MainContainer>
     </>
   );

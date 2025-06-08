@@ -70,9 +70,15 @@ const RecommendPlace = () => {
         }
     }, [memberId]);
 
+    useEffect(() => {
+        if (data.length > 0) {
+            handlePlaceClick(data[0], 0);
+        }
+    }, [data]);
+    
     const handlePlaceClick = (item, index) => {
         if (!mapRef.current) {
-            alert('지도가 아직 초기화되지 않았습니다.');
+            // alert('지도가 아직 초기화되지 않았습니다.');
             return;
         }
 
@@ -112,7 +118,8 @@ const RecommendPlace = () => {
         <S.PlaceRecommend>
             <S.PlaceWrapper>
                 <S.PlaceList>
-                    <S.PlaceTitle1>{selectedType} 장소 추천 입니다!</S.PlaceTitle1>
+                    <S.SubTitle>{selectedType}을 위한 장소가 핫해요! </S.SubTitle>
+                    <S.MainTitle>추천 장소 📍</S.MainTitle>
                     {data.map((item, index) => {
                         const parts = item.interestDataContent.split('|');
                         const items = [];
@@ -120,20 +127,9 @@ const RecommendPlace = () => {
                             const key = parts[i];
                             const value = parts[i + 1];
                             items.push(
-                                <div key={i} style={{marginBottom: '10px'}}>
-                                    <span style={{
-                                        fontWeight: 500,
-                                        fontSize: 14,
-                                        display: 'inline-block',
-                                        width: 65,
-                                        color: '#333333'
-                                    }}>{key}</span>: <span style={{
-                                        fontWeight: 400,
-                                        fontSize: 14,
-                                        marginLeft: 10,
-                                        color: '#333333'
-                                    }}>{value}</span>
-                                </div>
+                                <S.ItemTitleWrap key={i}>
+                                    <S.ItemTitle>{key}</S.ItemTitle>: <S.ItemSubTitle>{value}</S.ItemSubTitle>
+                                </S.ItemTitleWrap>
                             );
                         }
                         return (
