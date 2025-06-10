@@ -20,8 +20,8 @@ const CalendarHeader = () => {
   const [weather, setWeather] = useState(null);
   const extractCityDistrict = (displayName) => {
     const { address } = displayName;
-    const {city, borough, quarter} = address;
-    return `${city} ${borough} ${quarter ? quarter : ""}`; // "서울 강남구 자곡동"
+    const { city, borough, quarter } = address;
+    return `${city} ${borough} ${quarter ? quarter : ""}`;
   };
 
   // 현재 위치 + 주소 받아오기
@@ -40,7 +40,7 @@ const CalendarHeader = () => {
           );
           const data = await response.json();
           const formattedAddress = extractCityDistrict(data);
-          setLocationAddress(formattedAddress)
+          setLocationAddress(formattedAddress);
         } catch (error) {
           console.error("주소 변환 실패:", error);
         }
